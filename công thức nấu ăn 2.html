@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bảng công thức nấu ăn</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f9fc;
+    color: #333;
+  }
+  /* Layout */
+  .container {
+    display: flex;
+    height: 100%;
+  }
+  aside {
+    width: 280px;
+    background: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    color: #ecf0f1;
+    padding: 20px 10px;
+  }
+  aside h2 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    text-align:center;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 10px;
+  }
+  #recipe-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+  #recipe-list button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #ecf0f1;
+    text-align: left;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    transition: background 0.2s;
+  }
+  #recipe-list button:hover {
+    background: #34495e;
+  }
+  #recipe-list button.active {
+    background: #16a085;
+  }
+  #add-recipe-btn {
+    background: #16a085;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #add-recipe-btn:hover {
+    background: #13856e;
+  }
+  main {
+    flex-grow: 1;
+    padding: 25px 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  main h2 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    color: #2c3e50;
+    border-bottom: 2px solid #16a085;
+    padding-bottom: 8px;
+    text-align: center;
+  }
+  .table-wrapper {
+    overflow-x: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.07);
+  }
+  th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  th {
+    background: #16a085;
+    color: white;
+    user-select: none;
+    font-weight: 600;
+    text-align: center;
+  }
+  td {
+    text-align: center;
+  }
+  /* Smaller font for Số lượng and Đơn vị tính columns */
+  .small-text {
+    font-size: 0.85rem;
+  }
+  td.small-text input,
+  td.small-text select {
+    font-size: 0.85rem;
+  }
+  td input, td select, td textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    font-size: 1rem;
+    padding: 6px 8px;
+    background: transparent;
+    color: #333;
+    font-family: inherit;
+    resize: vertical;
+    text-align: left; /* inputs aligned left for easier typing */
+  }
+  td input:focus, td select:focus, td textarea:focus {
+    outline: 2px solid #16a085;
+    background: #eafaf8;
+  }
+  td textarea {
+    min-height: 40px;
+    font-family: inherit;
+  }
+  .actions-cell {
+    width: 100px;
+    text-align: center;
+  }
+  .btn {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    user-select: none;
+  }
+  .btn:hover {
+    background: #c0392b;
+  }
+  #add-row-btn {
+    margin-top: 12px;
+    background: #2980b9;
+    padding: 10px 14px;
+    align-self: flex-start;
+  }
+  #add-row-btn:hover {
+    background: #1c5980;
+  }
+  #delete-recipe-btn {
+    margin-top: 20px;
+    background: #e74c3c;
+    padding: 6px 12px;
+    width: auto;
+    font-size: 0.9rem;
+    font-weight: 600;
+    align-self: flex-end;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  #delete-recipe-btn:hover {
+    background: #c0392b;
+  }
+  /* Scrollbar for recipe list */
+  #recipe-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  #recipe-list::-webkit-scrollbar-thumb {
+    background: #16a085;
+    border-radius: 3px;
+  }
+  #recipe-steps-label {
+    font-weight: 700;
+    margin: 25px 0 8px;
+    color: #2c3e50;
+    font-size: 1.2rem;
+  }
+  #recipe-steps {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 2px solid #16a085;
+    background: white;
+    resize: vertical;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  #recipe-steps:focus {
+    outline: none;
+    background: #eafaf8;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <aside>
+    <h2>Danh sách món ăn</h2>
+    <div id="recipe-list" role="list" aria-label="Danh sách món ăn"></div>
+    <button id="add-recipe-btn" aria-label="Thêm món ăn mới">+ Thêm món ăn</button>
+  </aside>
+  <main>
+    <h2 id="selected-recipe-title">Chọn một món ăn</h2>
+    <div class="table-wrapper" aria-live="polite" aria-relevant="additions removals">
+      <table id="ingredients-table" aria-label="Bảng nguyên liệu công thức nấu ăn" tabindex="0">
+        <thead>
+          <tr>
+            <th>Nguyên liệu</th>
+            <th class="small-text">Số lượng</th>
+            <th class="small-text">Đơn vị tính</th>
+            <th>Ghi chú</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows go here -->
+        </tbody>
+      </table>
+      <button id="add-row-btn" class="btn" aria-label="Thêm nguyên liệu">+ Thêm nguyên liệu</button>
+
+      <label for="recipe-steps" id="recipe-steps-label">Cách làm món ăn</label>
+      <textarea id="recipe-steps" placeholder="Mô tả cách làm món ăn..." aria-describedby="recipe-steps-label"></textarea>
+
+      <button id="delete-recipe-btn" class="btn" aria-label="Xóa món ăn hiện tại">Xóa món ăn</button>
+    </div>
+  </main>
+</div>
+
+<script>
+  const STORAGE_KEY = 'recipeManagerRecipes';
+
+  const recipeListEl = document.getElementById('recipe-list');
+  const addRecipeBtn = document.getElementById('add-recipe-btn');
+  const selectedRecipeTitle = document.getElementById('selected-recipe-title');
+  const ingredientsTableBody = document.querySelector('#ingredients-table tbody');
+  const addRowBtn = document.getElementById('add-row-btn');
+  const deleteRecipeBtn = document.getElementById('delete-recipe-btn');
+  const recipeStepsTextarea = document.getElementById('recipe-steps');
+
+  const unitOptions = [
+    '',
+    'gam',
+    'mg',
+    'ml',
+    'lít',
+    'muỗng cà phê',
+    'muỗng canh',
+    'cái',
+    'miếng',
+    'quả',
+    'bát',
+    'ly'
+  ];
+
+  let recipes = [];
+  let selectedRecipeIndex = null;
+
+  function saveRecipes() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
+  }
+
+  function loadRecipes() {
+    let data = localStorage.getItem(STORAGE_KEY);
+    if(data) {
+      try {
+        const parsed = JSON.parse(data);
+        if(Array.isArray(parsed)) {
+          recipes = parsed;
+        }
+      } catch(e) {
+        console.warn('Lỗi khi đọc dữ liệu món ăn từ localStorage.', e);
+      }
+    }
+  }
+
+  function renderRecipeList() {
+    recipeListEl.innerHTML = '';
+    if(recipes.length === 0) {
+      const noRecipeMsg = document.createElement('p');
+      noRecipeMsg.textContent = 'Chưa có món ăn nào. Vui lòng thêm món.';
+      noRecipeMsg.style.color = '#bdc3c7';
+      noRecipeMsg.style.fontStyle = 'italic';
+      recipeListEl.appendChild(noRecipeMsg);
+      selectedRecipeTitle.textContent = 'Chọn một món ăn';
+      clearTable();
+      return;
+    }
+    recipes.forEach((recipe, idx) => {
+      const btn = document.createElement('button');
+      btn.textContent = recipe.name || 'Món ăn không tên';
+      btn.className = (idx === selectedRecipeIndex) ? 'active' : '';
+      btn.setAttribute('data-index', idx);
+      btn.setAttribute('aria-selected', idx === selectedRecipeIndex);
+      btn.addEventListener('click', () => {
+        selectRecipe(idx);
+      });
+      recipeListEl.appendChild(btn);
+    });
+  }
+
+  function clearTable() {
+    ingredientsTableBody.innerHTML = '';
+    addRowBtn.style.display = 'none';
+    deleteRecipeBtn.style.display = 'none';
+    recipeStepsTextarea.style.display = 'none';
+    recipeStepsTextarea.value = '';
+  }
+
+  function selectRecipe(index) {
+    if(index === selectedRecipeIndex) return;
+    if(index < 0 || index >= recipes.length) return;
+    selectedRecipeIndex = index;
+    renderRecipeList();
+    renderSelectedRecipe();
+  }
+
+  function renderSelectedRecipe() {
+    if(selectedRecipeIndex === null) {
+      selectedRecipeTitle.textContent = 'Chọn một món ăn';
+      clearTable();
+      return;
+    }
+    const recipe = recipes[selectedRecipeIndex];
+    selectedRecipeTitle.textContent = recipe.name || 'Món ăn không tên';
+
+    ingredientsTableBody.innerHTML = '';
+    recipe.ingredients.forEach((item, idx) => {
+      const row = createIngredientRow(item, idx);
+      ingredientsTableBody.appendChild(row);
+    });
+    addRowBtn.style.display = 'inline-block';
+    deleteRecipeBtn.style.display = 'inline-block';
+    recipeStepsTextarea.style.display = 'block';
+    recipeStepsTextarea.value = recipe.cachLam || '';
+  }
+
+  function createIngredientRow(item, idx) {
+    const tr = document.createElement('tr');
+
+    // Nguyên liệu
+    const tdName = document.createElement('td');
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = item.name;
+    nameInput.placeholder = 'Tên nguyên liệu';
+    nameInput.addEventListener('input', e => {
+      updateIngredientField(idx, 'name', e.target.value);
+    });
+    tdName.appendChild(nameInput);
+    tr.appendChild(tdName);
+
+    // Số lượng
+    const tdQty = document.createElement('td');
+    tdQty.className = 'small-text';
+    const qtyInput = document.createElement('input');
+    qtyInput.type = 'number';
+    qtyInput.min = "0";
+    qtyInput.step = "any";
+    qtyInput.value = item.quantity;
+    qtyInput.placeholder = 'Số lượng';
+    qtyInput.addEventListener('input', e => {
+      updateIngredientField(idx, 'quantity', e.target.value);
+    });
+    tdQty.appendChild(qtyInput);
+    tr.appendChild(tdQty);
+
+    // Đơn vị tính
+    const tdUnit = document.createElement('td');
+    tdUnit.className = 'small-text';
+    const unitSelect = document.createElement('select');
+    unitOptions.forEach(unit => {
+      const opt = document.createElement('option');
+      opt.value = unit;
+      opt.textContent = unit || 'Chọn đơn vị';
+      unitSelect.appendChild(opt);
+    });
+    unitSelect.value = item.unit || '';
+    unitSelect.addEventListener('change', e => {
+      updateIngredientField(idx, 'unit', e.target.value);
+    });
+    tdUnit.appendChild(unitSelect);
+    tr.appendChild(tdUnit);
+
+    // Ghi chú
+    const tdNote = document.createElement('td');
+    const noteInput = document.createElement('input');
+    noteInput.type = 'text';
+    noteInput.value = item.note || '';
+    noteInput.placeholder = 'Ghi chú';
+    noteInput.addEventListener('input', e => {
+      updateIngredientField(idx, 'note', e.target.value);
+    });
+    tdNote.appendChild(noteInput);
+    tr.appendChild(tdNote);
+
+    // Hành động
+    const tdActions = document.createElement('td');
+    tdActions.className = 'actions-cell';
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn';
+    delBtn.textContent = 'Xóa';
+    delBtn.setAttribute('aria-label', `Xóa nguyên liệu ${item.name || 'không tên'}`);
+    delBtn.addEventListener('click', () => {
+      deleteIngredient(idx);
+    });
+    tdActions.appendChild(delBtn);
+    tr.appendChild(tdActions);
+
+    return tr;
+  }
+
+  function updateIngredientField(index, field, value) {
+    if(selectedRecipeIndex === null) return;
+    if(!recipes[selectedRecipeIndex]) return;
+    if(!recipes[selectedRecipeIndex].ingredients[index]) return;
+    if(field === 'quantity') {
+      if(value === '') {
+        recipes[selectedRecipeIndex].ingredients[index][field] = '';
+      } else {
+        let num = parseFloat(value);
+        recipes[selectedRecipeIndex].ingredients[index][field] = isNaN(num) ? '' : num;
+      }
+    } else {
+      recipes[selectedRecipeIndex].ingredients[index][field] = value;
+    }
+    saveRecipes();
+  }
+
+  function deleteIngredient(index) {
+    if(selectedRecipeIndex === null) return;
+    recipes[selectedRecipeIndex].ingredients.splice(index, 1);
+    saveRecipes();
+    renderSelectedRecipe();
+  }
+
+  function addIngredient() {
+    if(selectedRecipeIndex === null) return;
+    recipes[selectedRecipeIndex].ingredients.push({
+      name: '',
+      quantity: '',
+      unit: '',
+      note: ''
+    });
+    saveRecipes();
+    renderSelectedRecipe();
+  }
+
+  function addRecipe() {
+    let newName = prompt('Nhập tên món ăn mới:', '');
+    if(newName === null) return;
+    newName = newName.trim();
+    if(newName.length === 0) {
+      alert('Tên món ăn không được để trống.');
+      return;
+    }
+    if(recipes.some(r => r.name.toLowerCase() === newName.toLowerCase())) {
+      alert('Món ăn đã tồn tại. Vui lòng đặt tên khác.');
+      return;
+    }
+    const newRecipe = {
+      name: newName,
+      ingredients: [],
+      cachLam: ''
+    };
+    recipes.push(newRecipe);
+    saveRecipes();
+    selectRecipe(recipes.length - 1);
+  }
+
+  function deleteRecipe() {
+    if(selectedRecipeIndex === null) return;
+    const recipeName = recipes[selectedRecipeIndex].name || 'món ăn';
+    if(confirm(`Bạn có chắc muốn xóa món '${recipeName}'? Hành động này không thể hoàn tác.`)) {
+      recipes.splice(selectedRecipeIndex, 1);
+      if(recipes.length === 0) {
+        selectedRecipeIndex = null;
+      } else if(selectedRecipeIndex >= recipes.length) {
+        selectedRecipeIndex = recipes.length - 1;
+      }
+      saveRecipes();
+      renderRecipeList();
+      renderSelectedRecipe();
+    }
+  }
+
+  recipeStepsTextarea.addEventListener('input', () => {
+    if(selectedRecipeIndex === null) return;
+    recipes[selectedRecipeIndex].cachLam = recipeStepsTextarea.value;
+    saveRecipes();
+  });
+
+  loadRecipes();
+  renderRecipeList();
+  if(recipes.length > 0) {
+    selectRecipe(0);
+  }
+
+  addRecipeBtn.addEventListener('click', addRecipe);
+  addRowBtn.addEventListener('click', addIngredient);
+  deleteRecipeBtn.addEventListener('click', deleteRecipe);
+
+</script>
+</body>
+</html>
