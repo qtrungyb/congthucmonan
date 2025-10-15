@@ -13,21 +13,24 @@
     margin: 0; padding: 0;
     height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f9fc;
+    background: linear-gradient(135deg, #f7f9fc 0%, #eef2f7 100%);
     color: #333;
+    transition: all 0.3s ease;
   }
   /* Layout */
   .container {
     display: flex;
     height: 100%;
     flex-direction: column;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
   }
   aside {
     width: 100%;
-    background: #2c3e50;
+    background: linear-gradient(to bottom, #2c3e50, #34495e);
     color: #ecf0f1;
     padding: 15px;
     position: relative;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
   .mobile-menu-toggle {
     position: absolute;
@@ -39,14 +42,20 @@
     font-size: 1.5rem;
     cursor: pointer;
     display: none;
+    transition: transform 0.3s ease;
+  }
+  .mobile-menu-toggle:hover {
+    transform: scale(1.1);
   }
   aside h2 {
     font-weight: 700;
     margin-bottom: 15px;
     font-size: 1.4rem;
     text-align:center;
-    border-bottom: 1px solid #34495e;
+    border-bottom: 1px solid #4a6278;
     padding-bottom: 10px;
+    color: #16a085;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
   .search-container {
     position: relative;
@@ -54,22 +63,26 @@
   }
   #search-recipe {
     width: 100%;
-    padding: 8px 30px 8px 12px;
-    border-radius: 4px;
-    border: 1px solid #34495e;
-    background: #2c3e50;
+    padding: 10px 35px 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #4a6278;
+    background: rgba(255,255,255,0.1);
     color: white;
     outline: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
   }
   #search-recipe::placeholder {
     color: #bdc3c7;
   }
   #search-recipe:focus {
     border-color: #16a085;
+    box-shadow: 0 0 0 2px rgba(22, 160, 133, 0.2);
+    background: rgba(255,255,255,0.15);
   }
   .search-icon {
     position: absolute;
-    right: 10px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     color: #bdc3c7;
@@ -90,43 +103,56 @@
     border: none;
     color: #ecf0f1;
     text-align: left;
-    padding: 10px 15px;
+    padding: 12px 15px;
     font-size: 1rem;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     margin-bottom: 6px;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    overflow: hidden;
   }
   #recipe-list button:hover {
-    background: #34495e;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(3px);
   }
   #recipe-list button.active {
-    background: #16a085;
+    background: linear-gradient(to right, #16a085, #1abc9c);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
   #recipe-list .edit-icon {
     opacity: 0;
     transition: opacity 0.2s;
+    font-size: 0.9rem;
   }
   #recipe-list button:hover .edit-icon {
     opacity: 1;
   }
   #add-recipe-btn {
-    background: #16a085;
+    background: linear-gradient(to right, #16a085, #1abc9c);
     border: none;
     color: white;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 4px;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 6px;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
     width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
   }
   #add-recipe-btn:hover {
-    background: #13856e;
+    background: linear-gradient(to right, #13856e, #16a085);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  #add-recipe-btn:active {
+    transform: translateY(0);
   }
   main {
     flex-grow: 1;
@@ -134,12 +160,13 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    background: white;
   }
   .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 10px;
   }
@@ -150,49 +177,75 @@
     color: #2c3e50;
     border-bottom: 2px solid #16a085;
     padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-  .export-btn {
+  .recipe-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .export-btn, .copy-btn {
     background: #2980b9;
     border: none;
     color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
+    padding: 10px 15px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .copy-btn {
+    background: #8e44ad;
+  }
+  .export-btn:hover, .copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }
   .export-btn:hover {
     background: #1c5980;
+  }
+  .copy-btn:hover {
+    background: #703688;
   }
   .table-wrapper {
     overflow-x: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   }
   table {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    border-radius: 6px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.07);
+    border-radius: 8px;
+    overflow: hidden;
   }
   th, td {
-    padding: 12px 15px;
+    padding: 14px 16px;
     border-bottom: 1px solid #ecf0f1;
+    transition: background 0.2s ease;
   }
   th {
-    background: #16a085;
+    background: linear-gradient(to bottom, #16a085, #1abc9c);
     color: white;
     user-select: none;
     font-weight: 600;
     text-align: center;
+    position: sticky;
+    top: 0;
   }
   td {
     text-align: center;
+  }
+  tr:hover {
+    background: #f8f9fa;
   }
   /* Smaller font for Số lượng and Đơn vị tính columns */
   .small-text {
@@ -207,16 +260,19 @@
     box-sizing: border-box;
     border: none;
     font-size: 1rem;
-    padding: 6px 8px;
+    padding: 8px 10px;
     background: transparent;
     color: #333;
     font-family: inherit;
     resize: vertical;
-    text-align: left; /* inputs aligned left for easier typing */
+    text-align: left;
+    border-radius: 4px;
+    transition: all 0.2s ease;
   }
   td input:focus, td select:focus, td textarea:focus {
     outline: 2px solid #16a085;
     background: #eafaf8;
+    box-shadow: 0 0 0 2px rgba(22, 160, 133, 0.2);
   }
   td textarea {
     min-height: 40px;
@@ -230,20 +286,26 @@
     background: #e74c3c;
     border: none;
     color: white;
-    padding: 6px 10px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
     user-select: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
   .btn:hover {
     background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  .btn:active {
+    transform: translateY(0);
   }
   #add-row-btn {
-    margin-top: 12px;
+    margin-top: 15px;
     background: #2980b9;
-    padding: 10px 14px;
+    padding: 12px 16px;
     align-self: flex-start;
   }
   #add-row-btn:hover {
@@ -252,13 +314,13 @@
   #delete-recipe-btn {
     margin-top: 20px;
     background: #e74c3c;
-    padding: 6px 12px;
+    padding: 10px 16px;
     width: auto;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 600;
     align-self: flex-end;
-    border-radius: 4px;
-    transition: background 0.3s;
+    border-radius: 6px;
+    transition: all 0.3s ease;
   }
   #delete-recipe-btn:hover {
     background: #c0392b;
@@ -271,27 +333,35 @@
     background: #16a085;
     border-radius: 3px;
   }
+  #recipe-list::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+  }
   #recipe-steps-label {
     font-weight: 700;
     margin: 25px 0 8px;
     color: #2c3e50;
     font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   #recipe-steps {
     width: 100%;
     min-height: 120px;
-    padding: 10px 12px;
+    padding: 12px 14px;
     font-size: 1rem;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 2px solid #16a085;
     background: white;
     resize: vertical;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
+    transition: all 0.3s ease;
   }
   #recipe-steps:focus {
     outline: none;
     background: #eafaf8;
+    box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.2);
   }
   
   /* Toast notification */
@@ -302,14 +372,20 @@
     padding: 15px 20px;
     background: #27ae60;
     color: white;
-    border-radius: 4px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 1000;
     transform: translateX(120%);
     transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   .toast.show {
     transform: translateX(0);
+  }
+  .toast.error {
+    background: #e74c3c;
   }
   
   /* Export modal */
@@ -334,25 +410,31 @@
   }
   .modal-content {
     background: white;
-    border-radius: 8px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 25px;
     width: 90%;
     max-width: 500px;
     max-height: 80vh;
     overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+  }
+  .modal.show .modal-content {
+    transform: translateY(0);
   }
   .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
   }
   .modal-title {
     margin: 0;
     color: #2c3e50;
+    font-size: 1.4rem;
   }
   .close-btn {
     background: none;
@@ -360,24 +442,119 @@
     font-size: 1.5rem;
     cursor: pointer;
     color: #7f8c8d;
+    transition: color 0.2s ease;
+  }
+  .close-btn:hover {
+    color: #e74c3c;
   }
   .export-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
   .export-option {
     padding: 15px;
     background: #f8f9fa;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
-    transition: background 0.2s;
+    gap: 12px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
   }
   .export-option:hover {
     background: #e9ecef;
+    transform: translateY(-2px);
+    border-color: #16a085;
+  }
+  
+  /* Confirmation modal */
+  .confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1002;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+  }
+  .confirmation-modal.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .confirmation-content {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+  }
+  .confirmation-modal.show .confirmation-content {
+    transform: translateY(0);
+  }
+  .confirmation-title {
+    margin: 0 0 15px;
+    color: #2c3e50;
+    font-size: 1.3rem;
+  }
+  .confirmation-message {
+    margin-bottom: 25px;
+    color: #7f8c8d;
+    line-height: 1.5;
+  }
+  .confirmation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  .confirm-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .confirm-delete {
+    background: #e74c3c;
+    color: white;
+  }
+  .confirm-delete:hover {
+    background: #c0392b;
+  }
+  .cancel-btn {
+    background: #95a5a6;
+    color: white;
+  }
+  .cancel-btn:hover {
+    background: #7f8c8d;
+  }
+  
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #7f8c8d;
+  }
+  .empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+  }
+  .empty-state-text {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
   }
   
   /* Responsive */
@@ -386,10 +563,10 @@
       flex-direction: row;
     }
     aside {
-      width: 280px;
-      min-width: 280px;
+      width: 300px;
+      min-width: 300px;
       height: 100%;
-      padding: 20px 10px;
+      padding: 20px 15px;
     }
     #recipe-list {
       max-height: none;
@@ -416,18 +593,26 @@
       overflow-x: visible;
     }
     th, td {
-      padding: 8px 10px;
+      padding: 10px 12px;
       font-size: 0.9rem;
     }
     .actions-cell {
       width: 80px;
     }
     .btn {
-      padding: 5px 8px;
+      padding: 7px 10px;
       font-size: 0.85rem;
     }
     #add-row-btn, #delete-recipe-btn {
       font-size: 0.9rem;
+    }
+    .recipe-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .export-btn, .copy-btn {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style>
@@ -436,7 +621,7 @@
 <div class="container">
   <aside>
     <button class="mobile-menu-toggle" id="menu-toggle">☰</button>
-    <h2>Danh sách món ăn</h2>
+    <h2>🍳 Danh sách món ăn</h2>
     
     <div class="search-container">
       <input type="text" id="search-recipe" placeholder="Tìm kiếm món ăn..." aria-label="Tìm kiếm món ăn">
@@ -449,10 +634,15 @@
   
   <main>
     <div class="main-header">
-      <h2 id="selected-recipe-title">Chọn một món ăn</h2>
-      <button class="export-btn" id="export-btn" aria-label="Xuất công thức">
-        <span>📤</span> Xuất công thức
-      </button>
+      <h2 id="selected-recipe-title">👨‍🍳 Chọn một món ăn</h2>
+      <div class="recipe-actions">
+        <button class="copy-btn" id="copy-btn" aria-label="Sao chép công thức">
+          <span>📋</span> Sao chép
+        </button>
+        <button class="export-btn" id="export-btn" aria-label="Xuất công thức">
+          <span>📤</span> Xuất công thức
+        </button>
+      </div>
     </div>
     
     <div class="table-wrapper" aria-live="polite" aria-relevant="additions removals">
@@ -472,22 +662,22 @@
       </table>
       <button id="add-row-btn" class="btn" aria-label="Thêm nguyên liệu">+ Thêm nguyên liệu</button>
 
-      <label for="recipe-steps" id="recipe-steps-label">Cách làm món ăn</label>
+      <label for="recipe-steps" id="recipe-steps-label">👩‍🍳 Cách làm món ăn</label>
       <textarea id="recipe-steps" placeholder="Mô tả cách làm món ăn..." aria-describedby="recipe-steps-label"></textarea>
 
-      <button id="delete-recipe-btn" class="btn" aria-label="Xóa món ăn hiện tại">Xóa món ăn</button>
+      <button id="delete-recipe-btn" class="btn" aria-label="Xóa món ăn hiện tại">🗑️ Xóa món ăn</button>
     </div>
   </main>
 </div>
 
 <!-- Toast notification -->
-<div class="toast" id="toast">Thành công!</div>
+<div class="toast" id="toast">✅ Thành công!</div>
 
 <!-- Export modal -->
 <div class="modal" id="export-modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 class="modal-title">Xuất công thức</h3>
+      <h3 class="modal-title">📤 Xuất công thức</h3>
       <button class="close-btn" id="close-export-modal">&times;</button>
     </div>
     <div class="export-options">
@@ -497,6 +687,18 @@
       <div class="export-option" id="export-print">
         <span>🖨️</span> In công thức
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation modal -->
+<div class="confirmation-modal" id="confirmation-modal">
+  <div class="confirmation-content">
+    <h3 class="confirmation-title">⚠️ Xác nhận xóa</h3>
+    <p class="confirmation-message" id="confirmation-message">Bạn có chắc muốn xóa món ăn này? Hành động này không thể hoàn tác.</p>
+    <div class="confirmation-buttons">
+      <button class="confirm-btn cancel-btn" id="cancel-delete">Hủy</button>
+      <button class="confirm-btn confirm-delete" id="confirm-delete">Xóa</button>
     </div>
   </div>
 </div>
@@ -513,11 +715,16 @@
   const searchInput = document.getElementById('search-recipe');
   const menuToggle = document.getElementById('menu-toggle');
   const exportBtn = document.getElementById('export-btn');
+  const copyBtn = document.getElementById('copy-btn');
   const exportModal = document.getElementById('export-modal');
   const closeExportModal = document.getElementById('close-export-modal');
   const exportText = document.getElementById('export-text');
   const exportPrint = document.getElementById('export-print');
   const toast = document.getElementById('toast');
+  const confirmationModal = document.getElementById('confirmation-modal');
+  const confirmationMessage = document.getElementById('confirmation-message');
+  const cancelDeleteBtn = document.getElementById('cancel-delete');
+  const confirmDeleteBtn = document.getElementById('confirm-delete');
 
   const unitOptions = [
     '',
@@ -536,10 +743,15 @@
 
   let recipes = [];
   let selectedRecipeIndex = null;
+  let recipeToDelete = null;
 
   // Show toast notification
-  function showToast(message, duration = 2000) {
+  function showToast(message, isError = false, duration = 2000) {
     toast.textContent = message;
+    toast.className = 'toast';
+    if (isError) {
+      toast.classList.add('error');
+    }
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
@@ -575,13 +787,14 @@
     const searchTerm = searchInput.value.toLowerCase().trim();
     
     if(recipes.length === 0) {
-      const noRecipeMsg = document.createElement('p');
-      noRecipeMsg.textContent = 'Chưa có món ăn nào. Vui lòng thêm món.';
-      noRecipeMsg.style.color = '#bdc3c7';
-      noRecipeMsg.style.fontStyle = 'italic';
-      noRecipeMsg.style.padding = '10px 15px';
-      recipeListEl.appendChild(noRecipeMsg);
-      selectedRecipeTitle.textContent = 'Chọn một món ăn';
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      emptyState.innerHTML = `
+        <div class="empty-state-icon">🍳</div>
+        <div class="empty-state-text">Chưa có món ăn nào. Vui lòng thêm món.</div>
+      `;
+      recipeListEl.appendChild(emptyState);
+      selectedRecipeTitle.textContent = '👨‍🍳 Chọn một món ăn';
       clearTable();
       return;
     }
@@ -591,12 +804,13 @@
     );
     
     if(filteredRecipes.length === 0) {
-      const noResultMsg = document.createElement('p');
-      noResultMsg.textContent = 'Không tìm thấy món ăn phù hợp.';
-      noResultMsg.style.color = '#bdc3c7';
-      noResultMsg.style.fontStyle = 'italic';
-      noResultMsg.style.padding = '10px 15px';
-      recipeListEl.appendChild(noResultMsg);
+      const emptyState = document.createElement('div');
+      emptyState.className = 'empty-state';
+      emptyState.innerHTML = `
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-text">Không tìm thấy món ăn phù hợp.</div>
+      `;
+      recipeListEl.appendChild(emptyState);
       return;
     }
     
@@ -631,6 +845,7 @@
     deleteRecipeBtn.style.display = 'none';
     recipeStepsTextarea.style.display = 'none';
     recipeStepsTextarea.value = '';
+    copyBtn.style.display = 'none';
     exportBtn.style.display = 'none';
   }
 
@@ -646,13 +861,13 @@
   // Render selected recipe details
   function renderSelectedRecipe() {
     if(selectedRecipeIndex === null) {
-      selectedRecipeTitle.textContent = 'Chọn một món ăn';
+      selectedRecipeTitle.textContent = '👨‍🍳 Chọn một món ăn';
       clearTable();
       return;
     }
     
     const recipe = recipes[selectedRecipeIndex];
-    selectedRecipeTitle.textContent = recipe.name || 'Món ăn không tên';
+    selectedRecipeTitle.textContent = `🍳 ${recipe.name || 'Món ăn không tên'}`;
 
     ingredientsTableBody.innerHTML = '';
     recipe.ingredients.forEach((item, idx) => {
@@ -664,6 +879,7 @@
     deleteRecipeBtn.style.display = 'inline-block';
     recipeStepsTextarea.style.display = 'block';
     recipeStepsTextarea.value = recipe.cachLam || '';
+    copyBtn.style.display = 'flex';
     exportBtn.style.display = 'flex';
   }
 
@@ -788,11 +1004,11 @@
     if(newName === null) return;
     newName = newName.trim();
     if(newName.length === 0) {
-      alert('Tên món ăn không được để trống.');
+      showToast('Tên món ăn không được để trống.', true);
       return;
     }
     if(recipes.some(r => r.name.toLowerCase() === newName.toLowerCase())) {
-      alert('Món ăn đã tồn tại. Vui lòng đặt tên khác.');
+      showToast('Món ăn đã tồn tại. Vui lòng đặt tên khác.', true);
       return;
     }
     const newRecipe = {
@@ -815,11 +1031,11 @@
     if(newName === null) return;
     const trimmedName = newName.trim();
     if(trimmedName.length === 0) {
-      alert('Tên món ăn không được để trống.');
+      showToast('Tên món ăn không được để trống.', true);
       return;
     }
     if(recipes.some((r, i) => i !== index && r.name.toLowerCase() === trimmedName.toLowerCase())) {
-      alert('Món ăn đã tồn tại. Vui lòng đặt tên khác.');
+      showToast('Món ăn đã tồn tại. Vui lòng đặt tên khác.', true);
       return;
     }
     recipe.name = trimmedName;
@@ -834,17 +1050,54 @@
   function deleteRecipe() {
     if(selectedRecipeIndex === null) return;
     const recipeName = recipes[selectedRecipeIndex].name || 'món ăn';
-    if(confirm(`Bạn có chắc muốn xóa món '${recipeName}'? Hành động này không thể hoàn tác.`)) {
-      recipes.splice(selectedRecipeIndex, 1);
-      if(recipes.length === 0) {
-        selectedRecipeIndex = null;
-      } else if(selectedRecipeIndex >= recipes.length) {
-        selectedRecipeIndex = recipes.length - 1;
-      }
-      saveRecipes();
-      renderRecipeList();
-      renderSelectedRecipe();
+    confirmationMessage.textContent = `Bạn có chắc muốn xóa món '${recipeName}'? Hành động này không thể hoàn tác.`;
+    recipeToDelete = selectedRecipeIndex;
+    confirmationModal.classList.add('show');
+  }
+
+  // Confirm recipe deletion
+  function confirmDeleteRecipe() {
+    if (recipeToDelete === null) return;
+    recipes.splice(recipeToDelete, 1);
+    if(recipes.length === 0) {
+      selectedRecipeIndex = null;
+    } else if(recipeToDelete >= recipes.length) {
+      selectedRecipeIndex = recipes.length - 1;
+    } else {
+      selectedRecipeIndex = recipeToDelete;
     }
+    saveRecipes();
+    renderRecipeList();
+    renderSelectedRecipe();
+    recipeToDelete = null;
+    confirmationModal.classList.remove('show');
+    showToast('Đã xóa món ăn!');
+  }
+
+  // Copy recipe to clipboard
+  function copyRecipeToClipboard() {
+    if(selectedRecipeIndex === null) return;
+    const recipe = recipes[selectedRecipeIndex];
+    let text = `Công thức: ${recipe.name}\n\n`;
+    text += "Nguyên liệu:\n";
+    
+    recipe.ingredients.forEach((ing, index) => {
+      text += `${index + 1}. ${ing.name} - ${ing.quantity} ${ing.unit || ''}`;
+      if (ing.note) text += ` (${ing.note})`;
+      text += "\n";
+    });
+    
+    text += "\nCách làm:\n";
+    text += recipe.cachLam || 'Chưa có hướng dẫn cách làm';
+    
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showToast('Đã sao chép công thức vào clipboard!');
+      })
+      .catch(err => {
+        console.error('Lỗi khi sao chép: ', err);
+        showToast('Không thể sao chép công thức', true);
+      });
   }
 
   // Export recipe as text
@@ -976,10 +1229,25 @@
     exportText.addEventListener('click', exportAsText);
     exportPrint.addEventListener('click', printRecipe);
     
-    // Close modal when clicking outside
+    // Copy functionality
+    copyBtn.addEventListener('click', copyRecipeToClipboard);
+    
+    // Confirmation modal
+    cancelDeleteBtn.addEventListener('click', () => {
+      confirmationModal.classList.remove('show');
+      recipeToDelete = null;
+    });
+    
+    confirmDeleteBtn.addEventListener('click', confirmDeleteRecipe);
+    
+    // Close modals when clicking outside
     window.addEventListener('click', (e) => {
       if (e.target === exportModal) {
         exportModal.classList.remove('show');
+      }
+      if (e.target === confirmationModal) {
+        confirmationModal.classList.remove('show');
+        recipeToDelete = null;
       }
     });
   }
